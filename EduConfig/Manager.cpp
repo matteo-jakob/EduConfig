@@ -10,25 +10,29 @@ void ShowManager() {
         bool selectedMethod = false;
         while (!selectedMethod)
         {
-            int input = std::getchar();
+            int input;
+            std::cin >> input;
 
             switch (input) {
-            case '0':
+            case 0:
                 selectedMethod = true;
                 ShowPersonList();
                 break;
-            case '1':
+            case 1:
                 selectedMethod = true;
                 ShowRoomList();
                 break;
-            case '3':
+            case 2:
+                std::cout << "coming soon!" << std::endl;
+                break;
+            case 3:
                 selectedMethod = true;
                 running = false;
                 break;
             default:
                 CoutError("Invalid Input");
                 break;
-            }
+            } 
 
         }
     }

@@ -2,18 +2,19 @@
 
 void ShowPersonList() {
     system("cls");
-    
+    std::vector<Person> personList;
     std::ifstream inputFile("person_data.txt");
 
     if (inputFile.is_open()) {
         while (!inputFile.eof()) {
-            const char* name;
-            const char* surname;
+            std::string name;
+            std::string  surname;
             BDATE birthdate;
-            const char* occupation;
-            std::vector<const char*> subjects; 
+            std::string  occupation;
+            std::vector<std::string> subjects;
+            std::string  description;
 
-            Person person(name, surname, birthdate, occupation, subjects);
+            Person person(name, surname, birthdate, occupation, subjects, description);
             personList.push_back(person);
         }
         inputFile.close();
@@ -22,33 +23,38 @@ void ShowPersonList() {
         std::cout << "Unable to open file." << std::endl;
     }
 
+    Person test("Max", "Mustermann", { 1, 1, 2000 }, "student", { "Math", "English", "Russian" }, "");
+    personList.push_back(test);
+
     for (int i = 0; i < personList.size(); ++i)
     {
-        std::cout << personList[i].id << " " << personList[i].name << std::endl;
+        PersonData person = personList[i].GetData();
+        std::cout << "[" << person.id << "]\t" << person.name << " " << person.surname <<  "\t" << person.occupation << std::endl;
     }
 
 
     std::cout << "[0] Add Person [1] Edit Person [2] Remove Person [3] quit" << std::endl;
     bool validInput = false;
     while (!validInput) {
-        int input = std::getchar();
+        int input;
+        std::cin >> input;
 
         switch (input)
         {
-        case '0':
+        case 0:
             AddPerson();
             validInput = true;
             break;
-        case '1':
+        case 1:
             EditPerson();
             validInput = true;
             break;
-        case '2':
+        case 2:
             RemovePerson();
             validInput = true;
             break;
-        case '3':
-            RemovePerson();
+        case 3:
+            // quit
             validInput = true;
             break;
         default:
