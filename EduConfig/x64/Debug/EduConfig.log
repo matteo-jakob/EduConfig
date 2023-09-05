@@ -1,0 +1,6 @@
+﻿  Lists.cpp
+  Manager.cpp
+  Code wird generiert...
+C:\Users\matte\Desktop\School\BBB\LAILA-J3\eduConfig\EduConfig\Lists.cpp(16): error C4700: Die nicht initialisierte lokale Variable "occupation" wurde verwendet.
+C:\Users\matte\Desktop\School\BBB\LAILA-J3\eduConfig\EduConfig\Lists.cpp(16): error C4700: Die nicht initialisierte lokale Variable "surname" wurde verwendet.
+C:\Users\matte\Desktop\School\BBB\LAILA-J3\eduConfig\EduConfig\Lists.cpp(16): error C4700: Die nicht initialisierte lokale Variable "name" wurde verwendet.
