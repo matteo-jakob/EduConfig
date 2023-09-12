@@ -9,6 +9,7 @@
 #include <fstream>
 
 #include "PersonData.h"
+#include "RoomData.h"
 
 void SetConsoleSize();
 void Intro();
@@ -16,10 +17,11 @@ void CoutError(const char* message);
 void ShowManager();
 
 void ShowPersonList();
-void ShowRoomList();
 
 void AddPerson();
 void EditPerson();
 void RemovePerson();
 
-extern std::vector<Person> personList;
+void LoadPersonList();
+void SavePersonList();
+

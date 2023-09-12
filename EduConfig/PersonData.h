@@ -1,5 +1,6 @@
 #pragma once
 
+
 struct BDATE {
     int day;
     int month;
@@ -53,9 +54,14 @@ private:
     }
 
 public:
-    Person(std::string n, std::string s, const BDATE& b, std::string o, std::vector<std::string> subs, std::string d)
+    Person(std::string n, std::string s, const BDATE& b, std::string o, std::vector<std::string> subs, std::string d, int idAssigned = -1)
         : name(n), surname(s), birthdate(b), occupation(o), subjects(subs), description(d) {
-        id = generateNextID();
+        if(idAssigned == -1)
+            id = generateNextID();
+    }
+
+    int GetId() {
+        return id;
     }
 
     PersonData GetData() {
@@ -80,3 +86,4 @@ public:
     }
 };
 
+extern std::vector<Person> personList;

@@ -1,8 +1,14 @@
 #include "Header.h"
+std::vector<Person> personList;
+std::vector<Room> rooms;
+
 void ShowManager() {
+
+    LoadPersonList();
     bool running = true;
     while (running) {
         system("cls");
+
         std::cout << "EduConfig by Matteo Jakob\n\n";
         std::cout << "\t\tSelect an option:\n\n";
         std::cout << "\t\t[0] Show person list [1] Show room list [2] Create Curriculum (Coming Soon) [3] quit\n";
@@ -44,8 +50,4 @@ void CoutError(const char* message) {
     SetConsoleTextAttribute(hConsole, 12);
     std::cout << "[!] " << message << std::endl;
     SetConsoleTextAttribute(hConsole, 0);
-}
-
-void loadPersonList() {
-
 }

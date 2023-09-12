@@ -35,5 +35,8 @@
     <ClInclude Include="PersonData.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="RoomData.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
