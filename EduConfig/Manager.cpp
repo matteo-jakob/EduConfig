@@ -4,7 +4,6 @@ std::vector<Room> rooms;
 
 void ShowManager() {
 
-    LoadPersonList();
     bool running = true;
     while (running) {
         system("cls");

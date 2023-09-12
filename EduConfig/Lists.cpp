@@ -2,6 +2,7 @@
 
 void ShowPersonList() {
     system("cls");
+    LoadPersonList();
 
     for (int i = 0; i < personList.size(); ++i)
     {
@@ -20,14 +21,12 @@ void ShowPersonList() {
         {
         case 0:
             AddPerson();
-            std::cout << "saving...";
             SavePersonList();
             std::cout << "Successfully updated list!\n";
             validInput = true;
             break;
         case 1:
             EditPerson();
-            std::cout << "saving...";
             SavePersonList();
             std::cout << "Successfully updated list!\n";
             validInput = true;
@@ -55,6 +54,8 @@ void ShowPersonList() {
 }
 
 void LoadPersonList() {
+    personList.clear();
+
     std::ifstream inputFile("person_data.txt");
     // create file if it doesnt exist
     if (!inputFile) {
@@ -97,11 +98,16 @@ void LoadPersonList() {
 
 void SavePersonList() {
     std::ofstream outputFile("person_data.txt");
+    if (!outputFile) {
+        std::ofstream createFile("person_data.txt");
+        createFile.close();
+        outputFile.open("person_data.txt");
+    }
 
     if (outputFile.is_open()) {
+        outputFile.clear();
         for (Person& person : personList) {
             PersonData data = person.GetData();
-
             outputFile << data.id << " "
                 << data.name << " "
                 << data.surname << " "
