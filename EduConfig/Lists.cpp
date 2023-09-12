@@ -59,13 +59,14 @@ void LoadPersonList() {
     std::ifstream inputFile("person_data.txt");
     // create file if it doesnt exist
     if (!inputFile) {
-        std::ofstream createFile("person_data.txt");
-        createFile.close();
+        std::ofstream cf("person_data.txt");
+        cf.close();
         inputFile.open("person_data.txt");
     }
 
     if (inputFile.is_open()) {
         while (true) { 
+            int id;
             std::string name;
             std::string surname;
             BDATE birthdate; 
@@ -73,7 +74,7 @@ void LoadPersonList() {
             std::vector<std::string> subjects;
             std::string description;
 
-            if (!(inputFile >> name >> surname >> birthdate.day >> birthdate.month >> birthdate.year >> occupation)) {
+            if (!(inputFile >> id >> name >> surname >> birthdate.day >> birthdate.month >> birthdate.year >> occupation)) {
                 break; 
             }
 
@@ -85,7 +86,7 @@ void LoadPersonList() {
             inputFile.ignore(); 
             std::getline(inputFile, description);
 
-            Person person(name, surname, birthdate, occupation, subjects, description);
+            Person person(name, surname, birthdate, occupation, subjects, description, id);
             personList.push_back(person);
         }
 
@@ -99,8 +100,8 @@ void LoadPersonList() {
 void SavePersonList() {
     std::ofstream outputFile("person_data.txt");
     if (!outputFile) {
-        std::ofstream createFile("person_data.txt");
-        createFile.close();
+        std::ofstream cf("person_data.txt");
+        cf.close();
         outputFile.open("person_data.txt");
     }
 
@@ -125,6 +126,15 @@ void SavePersonList() {
 
         outputFile.close();
         std::cout << "Person list saved to file." << std::endl;
+
+
+        std::ifstream filecontent("person_data.txt");
+        if (filecontent.is_open()) {
+            std::string content;
+            filecontent >> content;
+            std::cout << "This is the updated content of file: " << content << std::endl;
+            filecontent.close();
+        }
     }
     else {
         std::cout << "Unable to open file for saving." << std::endl;
