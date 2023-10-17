@@ -4,11 +4,15 @@ void ShowPersonList() {
     system("cls");
     LoadPersonList();
 
+    std::cout << "[id]\tName\tSurname\tOccupation\tDescription\tBirthyear\tSubjects" << std::endl;
     for (int i = 0; i < personList.size(); ++i)
     {
         PersonData person = personList[i].GetData();
-        std::cout << "[id]\tName\tSurname\tOccupation\tDescription\tBirthyear" << std::endl;
-        std::cout << "[" << person.id << "]\t" << person.name << " " << person.surname <<  "\t" << person.occupation << "\t" << person.description << "\t" << person.birthdate.year << std::endl;
+        std::cout << "[" << person.id << "]\t" << person.name << " " << person.surname << "\t" << person.occupation << "\t" << person.description << "\t" << person.birthdate.year << "\t";
+        for (std::string subj : person.subjects) {
+            std::cout << subj << ", ";
+        }
+        std::cout << std::endl;
     }
 
 
@@ -76,7 +80,6 @@ void LoadPersonList() {
         std::string line;
         while (std::getline(inputFile, line)) {
             std::istringstream iss(line);
-            std::string idstr;
             int id;
             std::string name;
             std::string surname;
@@ -86,41 +89,45 @@ void LoadPersonList() {
             std::vector<std::string> subjects;
             std::string description;
 
-            if (!(iss >> idstr)) {
-                std::cerr << "Error reading id: " << line << std::endl;
+            if (!(iss >> id)) {
+                std::cerr << "Error reading id from line: " << line << std::endl;
                 continue;
             }
 
-            // Remove non-numeric characters from idstr
-            idstr.erase(std::remove_if(idstr.begin(), idstr.end(), [](char c) { return !std::isdigit(c); }), idstr.end());
-
-            // Convert the id string to an integer
-            try {
-                id = std::stoi(idstr);
-            }
-            catch (const std::invalid_argument& e) {
-                std::cerr << "Error converting id to integer: " << e.what() << std::endl;
+            if (!(iss >> name >> surname)) {
+                std::cerr << "Error reading name and surname from line: " << line << std::endl;
                 continue;
             }
 
-            // Read the rest of the fields
-            if (!(iss >> name >> surname >> day >> month >> year >> occupation >> std::ws) || std::getline(iss, description).eof()) {
-                std::cerr << "Error reading line: " << line << std::endl;
+            if (!(iss >> birthdate.day >> birthdate.month >> birthdate.year)) {
+                std::cerr << "Error reading birthdate from line: " << line << std::endl;
                 continue;
             }
 
-            // Convert date components to integers
-            try {
-                birthdate.day = std::stoi(day);
-                birthdate.month = std::stoi(month);
-                birthdate.year = std::stoi(year);
-            }
-            catch (const std::invalid_argument& e) {
-                std::cerr << "Error converting date components to integers: " << e.what() << std::endl;
+            if (!(iss >> occupation)) {
+                std::cerr << "Error reading occupation from line: " << line << std::endl;
                 continue;
             }
 
-            // Create Person object and add to the vector
+            std::string subjectsStr;
+            if (!(iss >> std::ws >> subjectsStr)) {
+                std::cerr << "Error reading subjects from line: " << line << std::endl;
+                continue;
+            }
+
+            // Split subjects by commas
+            std::istringstream subjectsIss(subjectsStr);
+            subjects.clear();
+            while (std::getline(subjectsIss, subjectsStr, ',')) {
+                subjects.push_back(subjectsStr);
+            }
+
+            // Read the description
+            if (!(std::getline(iss >> std::ws, description))) {
+                std::cerr << "Error reading description from line: " << line << std::endl;
+                continue;
+            }
+
             Person person(name, surname, birthdate, occupation, subjects, description, id);
             personList.push_back(person);
         }
@@ -141,7 +148,6 @@ void SavePersonList() {
     }
 
     if (outputFile.is_open()) {
-        LoadPersonList();
         outputFile.clear();
         for (Person& person : personList) {
             PersonData data = person.GetData();
@@ -154,10 +160,10 @@ void SavePersonList() {
                 << data.occupation << " ";
 
             for (const std::string& subject : data.subjects) {
-                outputFile << subject << " ";
+                outputFile << subject << ",";
             }
 
-            outputFile << "\n" << data.description << "\n";
+            outputFile << " " << data.description << "\n";
         }
 
         outputFile.close();

@@ -56,8 +56,10 @@ private:
 public:
     Person(std::string n, std::string s, const BDATE& b, std::string o, std::vector<std::string> subs, std::string d, int idAssigned = -1)
         : name(n), surname(s), birthdate(b), occupation(o), subjects(subs), description(d) {
-        if(idAssigned == -1)
+        if (idAssigned == -1)
             id = generateNextID();
+        else
+            id = idAssigned;
     }
 
     int GetId() {
