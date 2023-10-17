@@ -4,32 +4,32 @@ void AddPerson() {
 	std::cout << "\nEnter name: ";
 	std::string name;
 	std::cin >> name;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::cout << "\nEnter Surname: ";
 	std::string surname;
 	std::cin >> surname;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::cout << "\nEnter Birthdate (day): ";
 	std::string birthdateDay;
 	std::cin >> birthdateDay;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::cout << "\nEnter Birthdate (month): ";
 	std::string birthdateMonth;
 	std::cin >> birthdateMonth;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::cout << "\nEnter Birthdate (year): ";
 	std::string birthdateYear;
 	std::cin >> birthdateYear;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::cout << "\nEnter Role: ";
 	std::string role;
 	std::cin >> role;
-	std::cin.clear();
+	std::cin.ignore(10000, '\n');
 
 	std::vector<std::string> subjects;
 	bool receivedAllSubjects = false;
@@ -37,22 +37,22 @@ void AddPerson() {
 		std::cout << "\nEnter Subject: ";
 		std::string subject;
 		std::cin >> subject;
-		std::cin.clear();
+		std::cin.ignore(10000, '\n');
 
 		subjects.push_back(subject);
 
 		std::cout << "\nWould you like to add more? [y|n]";
 		std::string input;
 		std::cin >> input;
-		std::cin.clear();
+		std::cin.ignore(10000, '\n');
 
 		if (input == "n")
 			receivedAllSubjects = true;
 	}
 	std::cout << "\nEnter description: ";
 	std::string description;
-	std::cin >> description;
-	std::cin.clear();
+	std::getline(std::cin, description);
+	std::cin.ignore(10000, '\n');
 
 	Person newPerson(name, surname, { stoi(birthdateDay), stoi(birthdateMonth), stoi(birthdateYear) }, role, subjects, description);
 	personList.push_back(newPerson);

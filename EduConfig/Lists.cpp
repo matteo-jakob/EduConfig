@@ -7,7 +7,8 @@ void ShowPersonList() {
     for (int i = 0; i < personList.size(); ++i)
     {
         PersonData person = personList[i].GetData();
-        std::cout << "[" << person.id << "]\t" << person.name << " " << person.surname <<  "\t" << person.occupation << std::endl;
+        std::cout << "[id]\tName\tSurname\tOccupation\tDescription\tBirthyear" << std::endl;
+        std::cout << "[" << person.id << "]\t" << person.name << " " << person.surname <<  "\t" << person.occupation << "\t" << person.description << "\t" << person.birthdate.year << std::endl;
     }
 
 
@@ -55,6 +56,8 @@ void ShowPersonList() {
 
 void LoadPersonList() {
     personList.clear();
+    std::string filename = "person_data.txt";
+    bool continueCheck = true;
 
     std::ifstream inputFile("person_data.txt");
     // create file if it doesnt exist
@@ -64,28 +67,60 @@ void LoadPersonList() {
         inputFile.open("person_data.txt");
     }
 
-    if (inputFile.is_open()) {
-        while (true) { 
+    if (!inputFile.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        continueCheck = false;
+    }
+
+    if (continueCheck) {
+        std::string line;
+        while (std::getline(inputFile, line)) {
+            std::istringstream iss(line);
+            std::string idstr;
             int id;
             std::string name;
             std::string surname;
-            BDATE birthdate; 
+            BDATE birthdate;
+            std::string day, month, year;
             std::string occupation;
             std::vector<std::string> subjects;
             std::string description;
 
-            if (!(inputFile >> id >> name >> surname >> birthdate.day >> birthdate.month >> birthdate.year >> occupation)) {
-                break; 
+            if (!(iss >> idstr)) {
+                std::cerr << "Error reading id: " << line << std::endl;
+                continue;
             }
 
-            std::string subject;
-            while (inputFile >> subject) {
-                subjects.push_back(subject);
+            // Remove non-numeric characters from idstr
+            idstr.erase(std::remove_if(idstr.begin(), idstr.end(), [](char c) { return !std::isdigit(c); }), idstr.end());
+
+            // Convert the id string to an integer
+            try {
+                id = std::stoi(idstr);
+            }
+            catch (const std::invalid_argument& e) {
+                std::cerr << "Error converting id to integer: " << e.what() << std::endl;
+                continue;
             }
 
-            inputFile.ignore(); 
-            std::getline(inputFile, description);
+            // Read the rest of the fields
+            if (!(iss >> name >> surname >> day >> month >> year >> occupation >> std::ws) || std::getline(iss, description).eof()) {
+                std::cerr << "Error reading line: " << line << std::endl;
+                continue;
+            }
 
+            // Convert date components to integers
+            try {
+                birthdate.day = std::stoi(day);
+                birthdate.month = std::stoi(month);
+                birthdate.year = std::stoi(year);
+            }
+            catch (const std::invalid_argument& e) {
+                std::cerr << "Error converting date components to integers: " << e.what() << std::endl;
+                continue;
+            }
+
+            // Create Person object and add to the vector
             Person person(name, surname, birthdate, occupation, subjects, description, id);
             personList.push_back(person);
         }
@@ -106,6 +141,7 @@ void SavePersonList() {
     }
 
     if (outputFile.is_open()) {
+        LoadPersonList();
         outputFile.clear();
         for (Person& person : personList) {
             PersonData data = person.GetData();
